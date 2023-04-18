@@ -98,11 +98,11 @@ namespace CKK.Logic.Models
          }
          else if (_product2.GetId() == id)
          {
-            return _product1;
+            return _product2;
          }
          else if (_product3.GetId() == id)
          {
-            return _product1;
+            return _product3;
          }
          else
          {
