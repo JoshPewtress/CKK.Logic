@@ -37,21 +37,26 @@ namespace CKK.Logic.Models
 
       public StoreItem AddStoreItem(Product prod, int quantity)
       {
-         // Checks for existing item
-         foreach (var item in _items)
+         if (quantity >= 0)
          {
-            // If ID matches existing ID, update quantity
-            if (item.GetProduct().GetId() == prod.GetId())
+            // Checks for existing item
+            foreach (var item in _items)
             {
-               item.SetQuantity(item.GetQuantity() + quantity);
-               return item;
+               // If ID matches existing ID, update quantity
+               if (item.GetProduct().GetId() == prod.GetId())
+               {
+                  item.SetQuantity(item.GetQuantity() + quantity);
+                  return item;
+               }
             }
-         }
-         // Did not exist, Create new StoreItem, Add to List
-         StoreItem newStoreItem = new StoreItem(prod, quantity);
-         _items.Add(newStoreItem);
+            // Did not exist, Create new StoreItem, Add to List
+            StoreItem newStoreItem = new StoreItem(prod, quantity);
+            _items.Add(newStoreItem);
 
-         return newStoreItem;
+            return newStoreItem;
+         }
+
+         return null;
       }
       
       public StoreItem RemoveStoreItem(int id, int quantity)
