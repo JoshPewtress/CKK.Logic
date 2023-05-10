@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +13,7 @@ namespace CKK.Logic.Models
       private string _name;
 
       private List<StoreItem> _items = new List<StoreItem>();
+  
 
       public int GetId()
       {
@@ -47,7 +47,6 @@ namespace CKK.Logic.Models
                return item;
             }
          }
-
          // Did not exist, Create new StoreItem, Add to List
          StoreItem newStoreItem = new StoreItem(prod, quantity);
          _items.Add(newStoreItem);
