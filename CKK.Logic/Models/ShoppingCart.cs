@@ -64,6 +64,7 @@ namespace CKK.Logic.Models
                   else
                   {
                      _products.Remove(item);
+                     return item;
                   }
                }
             }
