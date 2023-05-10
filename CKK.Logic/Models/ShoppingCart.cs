@@ -64,7 +64,7 @@ namespace CKK.Logic.Models
                   else
                   {
                      _products.Remove(item);
-                     return item;
+                     return new ShoppingCartItem(new Product(), 0);
                   }
                }
             }
