@@ -44,37 +44,31 @@ namespace CKK.Logic.Models
       }
 
       public ShoppingCartItem RemoveProduct(int id, int quantity)
-      {
-         // Iterate through _products list
-         foreach (var item in _products)
+      {    
+         // Validate provided quantity
+         if (quantity >= 0)
          {
-            // Validate provided quantity
-            if (quantity >= 0)
+            // Checks if list contains the Id
+            if (_products.Contains(GetProductById(id)))
             {
-               // Checks if list contains the Id
-               if (item.GetProduct().GetId() == id)
+               // Item quantity is enough to remove
+               if (GetProductById(id).GetQuantity() - quantity > 0)
                {
-                  // Item quantity is enough to remove
-                  if (item.GetQuantity() >= quantity)
-                  {
-                     item.SetQuantity(item.GetQuantity() - quantity);
-                     return item;
-                  }
-                  // Quantity to remove is too high, remove item
-                  else
-                  { 
-                     _products.Remove(item);
+                  GetProductById(id).SetQuantity(GetProductById(id).GetQuantity() - quantity);
+               }
+               // Quantity to remove is too high, remove item
+               else
+               { 
+                  _products.Remove(GetProductById(id));
 
-                     Product newProduct = new Product();
-                        newProduct.SetId(id);
-                     ShoppingCartItem newItem = new ShoppingCartItem(newProduct, 0);
-                     return newItem;
-                  }
+                  ShoppingCartItem newItem = new ShoppingCartItem(null, 0);
+                  return newItem;
                }
             }
          }
-         // Product was not found
-         return null;
+         
+      // Product was not found
+      return null;
       }
 
       public ShoppingCartItem GetProductById(int id)
