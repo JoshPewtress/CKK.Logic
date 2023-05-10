@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,9 +12,8 @@ namespace CKK.Logic.Models
     {
       private int _id;
       private string _name;
-      private Product _product1;
-      private Product _product2;
-      private Product _product3;
+
+      private List<StoreItem> _items = new List<StoreItem>();
 
       public int GetId()
       {
@@ -34,80 +35,70 @@ namespace CKK.Logic.Models
          _name = name;
       }
 
-      public void AddStoreItem(Product product)
+      public StoreItem AddStoreItem(Product prod, int quantity)
       {
-         // Assigning product to first available slot
-         if (_product1 == null)
+         // Checks for existing item
+         foreach (var item in _items)
          {
-            _product1 = product;
+            // If ID matches existing ID, update quantity
+            if (item.GetProduct().GetId() == prod.GetId())
+            {
+               item.SetQuantity(item.GetQuantity() + quantity);
+               return item;
+            }
          }
-         else if (_product2 == null) {
-            _product2 = product;
-         }
-         else if (_product3 == null)
+
+         // Did not exist, Create new StoreItem, Add to List
+         StoreItem newStoreItem = new StoreItem(prod, quantity);
+         _items.Add(newStoreItem);
+
+         return newStoreItem;
+      }
+      
+      public StoreItem RemoveStoreItem(int id, int quantity)
+      {
+         // Check for matching StoreItem
+         foreach (var item in _items)
          {
-            _product3 = product;
+            if (item.GetProduct().GetId() == id)
+            {
+               // Found matching Id, ensuring no negative quantity after change
+               if (item.GetQuantity() < quantity)
+               {
+                  item.SetQuantity(0);
+                  return item;
+               }
+
+               item.SetQuantity(item.GetQuantity() - quantity);
+               return item;
+            }  
          }
+
+         // No matching item found
+         return null;
       }
 
-      public void RemoveStoreItem(int productNum) 
+      public StoreItem FindStoreItemById(int id)
       {
-         if (productNum == 1)
+         // Queries the _items list to a matching ID
+         var storeItem = 
+            from item in _items
+            where item.GetProduct().GetId().Equals(id)
+            select item;
+
+         // If match was found return it
+         if (storeItem.Any())
          {
-            _product1 = null;
+            return storeItem.FirstOrDefault();
          }
-         else if (productNum == 2)
-         {
-            _product2 = null;
-         }
-         else if (productNum == 3)
-         {
-            _product3 = null;
-         }
-         else
-         {
-            Console.WriteLine("Error. Invalid input detected.");
-         }
+
+         return null;
+      }
+      
+      public List<StoreItem> GetStoreItems()
+      {
+         return _items;
       }
 
-      public Product GetStoreItem(int productNum)
-      {
-         if (productNum == 1)
-         {
-            return _product1;
-         }
-         else if ( productNum == 2)
-         {
-            return _product2;
-         }
-         else if (productNum == 3) 
-         {
-            return _product3;
-         }
-         else
-         {
-            return null;
-         }
-      }
-
-      public Product FindStoreItemById(int id)
-      {
-         if (_product1.GetId() == id)
-         {
-            return _product1;
-         }
-         else if (_product2.GetId() == id)
-         {
-            return _product2;
-         }
-         else if (_product3.GetId() == id)
-         {
-            return _product3;
-         }
-         else
-         {
-            return null;
-         }
-      }
-    }
+   }
 }
