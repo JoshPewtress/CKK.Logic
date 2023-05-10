@@ -62,10 +62,13 @@ namespace CKK.Logic.Models
                   }
                   // Quantity to remove is too high, remove item
                   else
-                  {
-                     item.SetQuantity(0);
+                  { 
                      _products.Remove(item);
-                     return item;
+
+                     Product newProduct = new Product();
+                        newProduct.SetId(id);
+                     ShoppingCartItem newItem = new ShoppingCartItem(newProduct, 0);
+                     return newItem;
                   }
                }
             }
