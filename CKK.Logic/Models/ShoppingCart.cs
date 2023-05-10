@@ -23,24 +23,24 @@ namespace CKK.Logic.Models
 
       public ShoppingCartItem AddProduct(Product prod, int quantity)
       {
-         // Check list for product matching Id
-         foreach (var item in _products)
+         // Validate quantity is positive and a number
+         if (quantity >= 0 && quantity <= int.MaxValue) 
          {
-            // Validate quantity is not negative
-            if (quantity >= 0)
+            // Check if prod already exists
+            if (_products.Contains(GetProductById(prod.GetId())))
             {
-               // Found product, add to quantity
-               if (item.GetProduct().GetId() == prod.GetId())
-               {
-                  item.SetQuantity(item.GetQuantity() + quantity);
-                  return item;
-               }
+               GetProductById(prod.GetId()).SetQuantity(GetProductById(prod.GetId()).GetQuantity() + quantity);
+               return GetProductById(prod.GetId());
+            }
+            else
+            {
+               ShoppingCartItem newCartItem = new ShoppingCartItem(prod, quantity);
+               _products.Add(newCartItem);
+               return newCartItem;
             }
          }
 
-         ShoppingCartItem newCartItem = new ShoppingCartItem(prod, quantity);
-         _products.Add(newCartItem);
-         return newCartItem;
+         return null;
       }
 
       public ShoppingCartItem RemoveProduct(int id, int quantity)
@@ -55,6 +55,7 @@ namespace CKK.Logic.Models
                if (GetProductById(id).GetQuantity() - quantity > 0)
                {
                   GetProductById(id).SetQuantity(GetProductById(id).GetQuantity() - quantity);
+                  return GetProductById(id);
                }
                // Quantity to remove is too high, remove item
                else
