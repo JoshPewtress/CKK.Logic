@@ -75,7 +75,6 @@ namespace CKKTests
 
          // Assert
          Assert.Equal(expected, actual);
-
       }
    }
 }
