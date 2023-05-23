@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CKK.Logic.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -7,75 +8,47 @@ using System.Threading.Tasks;
 
 namespace CKK.Logic.Models
 {
-    public class Store
-    {
-      private int _id;
-      private string _name;
+   public class Store : Entity
+   {
 
-      private List<StoreItem> _items = new List<StoreItem>();
-  
-
-      public int GetId()
-      {
-         return _id;
-      }
-
-      public void SetId(int id)
-      {
-         _id = id;
-      }
-
-      public string GetName()
-      {
-         return _name;
-      }
-
-      public void SetName(string name)
-      {
-         _name = name;
-      }
+      private List<StoreItem> Items = new List<StoreItem>();
 
       public StoreItem AddStoreItem(Product prod, int quantity)
       {
-         if (quantity >= 0)
+         // Checks for existing item
+         foreach (var item in Items)
          {
-            // Checks for existing item
-            foreach (var item in _items)
+            // If ID matches existing ID, update quantity
+            if (item.Product.Id == prod.Id)
             {
-               // If ID matches existing ID, update quantity
-               if (item.GetProduct().GetId() == prod.GetId())
-               {
-                  item.SetQuantity(item.GetQuantity() + quantity);
-                  return item;
-               }
+               item.Quantity = (item.Quantity + quantity);
+               return item;
             }
-            // Did not exist, Create new StoreItem, Add to List
-            StoreItem newStoreItem = new StoreItem(prod, quantity);
-            _items.Add(newStoreItem);
-
-            return newStoreItem;
          }
+         // Did not exist, Create new StoreItem, Add to List
+         StoreItem newStoreItem = new StoreItem(prod, quantity);
+         Items.Add(newStoreItem);
 
-         return null;
+         return newStoreItem;
       }
-      
+
       public StoreItem RemoveStoreItem(int id, int quantity)
       {
          // Check for matching StoreItem
-         foreach (var item in _items)
+         foreach (var item in Items)
          {
-            if (item.GetProduct().GetId() == id)
+            if (item.Product.Id == id)
             {
                // Found matching Id, ensuring no negative quantity after change
-               if (item.GetQuantity() < quantity)
+               if (item.Quantity < quantity)
                {
-                  item.SetQuantity(0);
+                  item.Quantity = 0;
                   return item;
                }
 
-               item.SetQuantity(item.GetQuantity() - quantity);
+               item.Quantity = item.Quantity - quantity;
                return item;
-            }  
+            }
          }
 
          // No matching item found
@@ -85,9 +58,9 @@ namespace CKK.Logic.Models
       public StoreItem FindStoreItemById(int id)
       {
          // Queries the _items list to a matching ID
-         var storeItem = 
-            from item in _items
-            where item.GetProduct().GetId().Equals(id)
+         var storeItem =
+            from item in Items
+            where item.Product.Id.Equals(id)
             select item;
 
          // If match was found return it
@@ -98,10 +71,10 @@ namespace CKK.Logic.Models
 
          return null;
       }
-      
+
       public List<StoreItem> GetStoreItems()
       {
-         return _items;
+         return Items;
       }
 
    }

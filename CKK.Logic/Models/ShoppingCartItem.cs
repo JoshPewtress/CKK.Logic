@@ -1,45 +1,14 @@
-﻿
+﻿using CKK.Logic.Interfaces;
 
 namespace CKK.Logic.Models
 {
-    public class ShoppingCartItem
-    {
-        private Product _product;
-        private int _quantity;
+   public class ShoppingCartItem : InventoryItem
+   {
 
-        public ShoppingCartItem(Product product, int quantity)
-        {
-            _product = product;
-            _quantity = quantity;
-        }
+      public ShoppingCartItem(Product product, int quantity) : base()
+      {
+      }
 
-        public int GetQuantity()
-        {
-            return _quantity;
-        }
-
-        public void SetQuantity(int quantity)
-        {
-            _quantity = quantity;
-        }
-
-        public Product GetProduct()
-        {
-            return _product;
-        }
-
-        public void SetProduct(Product product)
-        {
-            _product = product;
-        }
-
-        public decimal GetTotal()
-        {
-            decimal total;
-
-            total = _product.GetPrice() * _quantity;
-
-            return total;
-        }
-    }
+      public decimal GetTotal() => base.Product.Price * base.Quantity;
+   }
 }

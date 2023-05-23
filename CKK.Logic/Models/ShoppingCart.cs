@@ -8,75 +8,76 @@ namespace CKK.Logic.Models
 {
    public class ShoppingCart
    {
-      private Customer _customer;
-      private List<ShoppingCartItem> _products = new List<ShoppingCartItem>();
+      private Customer Customer;
+      private List<ShoppingCartItem> Products = new List<ShoppingCartItem>();
 
-      public ShoppingCart(Customer cust) 
+      public ShoppingCart(Customer cust)
       {
-         _customer = cust;
+         Customer = cust;
       }
 
       public int GetCustomerId()
       {
-         return _customer.GetId();
+         return Customer.Id;
       }
 
       public ShoppingCartItem AddProduct(Product prod, int quantity)
       {
-         // Validate quantity is positive and a number
-         if (quantity >= 0 && quantity <= int.MaxValue) 
+         // Check list for product matching Id
+         foreach (var item in Products)
          {
-            // Check if prod already exists
-            if (_products.Contains(GetProductById(prod.GetId())))
+            // Validate quantity is not negative
+            if (quantity >= 0)
             {
-               GetProductById(prod.GetId()).SetQuantity(GetProductById(prod.GetId()).GetQuantity() + quantity);
-               return GetProductById(prod.GetId());
-            }
-            else
-            {
-               ShoppingCartItem newCartItem = new ShoppingCartItem(prod, quantity);
-               _products.Add(newCartItem);
-               return newCartItem;
+               // Found product, add to quantity
+               if (item.Product.Id == prod.Id)
+               {
+                  item.Quantity = item.Quantity + quantity;
+                  return item;
+               }
             }
          }
 
-         return null;
+         ShoppingCartItem newCartItem = new ShoppingCartItem(prod, quantity);
+         Products.Add(newCartItem);
+         return newCartItem;
       }
 
       public ShoppingCartItem RemoveProduct(int id, int quantity)
-      {    
-         // Validate provided quantity
-         if (quantity >= 0)
+      {
+         // Iterate through _products list
+         foreach (var item in Products)
          {
-            // Checks if list contains the Id
-            if (_products.Contains(GetProductById(id)))
+            // Validate provided quantity
+            if (quantity >= 0)
             {
-               // Item quantity is enough to remove
-               if (GetProductById(id).GetQuantity() - quantity > 0)
+               // Checks if list contains the Id
+               if (item.Product.Id == id)
                {
-                  GetProductById(id).SetQuantity(GetProductById(id).GetQuantity() - quantity);
-                  return GetProductById(id);
-               }
-               // Quantity to remove is too high, remove item
-               else
-               { 
-                  _products.Remove(GetProductById(id));
-
-                  ShoppingCartItem newItem = new ShoppingCartItem(null, 0);
-                  return newItem;
+                  // Item quantity is enough to remove
+                  if (item.Quantity >= quantity)
+                  {
+                     item.Quantity = item.Quantity - quantity;
+                     return item;
+                  }
+                  // Quantity to remove is too high, remove item
+                  else
+                  {
+                     Products.Remove(item);
+                     return new ShoppingCartItem(new Product(), 0);
+                  }
                }
             }
          }
-         
-      // Product was not found
-      return null;
+         // Product was not found
+         return null;
       }
 
       public ShoppingCartItem GetProductById(int id)
       {
-         var product = 
-            from item in _products
-            where item.GetProduct().GetId().Equals(id)
+         var product =
+            from item in Products
+            where item.Product.Id.Equals(id)
             select item;
 
          if (product.Any())
@@ -86,21 +87,21 @@ namespace CKK.Logic.Models
 
          return null;
       }
-      
+
       public decimal GetTotal()
       {
          // Queries _product for the total of each element and uses Sum() to add them
          var total =
-            (from item in _products
-            where item.GetTotal() > 0
-            select item.GetTotal()).Sum();
+            (from item in Products
+             where item.GetTotal() > 0
+             select item.GetTotal()).Sum();
 
          return total;
       }
 
       public List<ShoppingCartItem> GetProducts()
       {
-         return _products;
+         return Products;
       }
    }
 }
