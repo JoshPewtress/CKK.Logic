@@ -75,7 +75,7 @@ namespace CKK.Logic.Models
                if (item.Product.Id == id)
                {
                   // Item quantity is enough to remove
-                  if (item.Quantity >= quantity)
+                  if (item.Quantity > quantity)
                   {
                      item.Quantity = item.Quantity - quantity;
                      return item;
