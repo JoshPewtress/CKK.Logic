@@ -10,8 +10,20 @@ namespace CKK.Logic.Interfaces
 {
    public abstract class InventoryItem
    {
-      public Product Product { get; private set; }
+      private Product product;
       private int quantity;
+
+      public Product Product
+      {
+         get
+         {
+            return product;
+         }
+         set
+         {
+            product = value;
+         }
+      }
 
       public int Quantity
       {
