@@ -61,14 +61,15 @@ namespace CKK.Logic.Models
 
       public ShoppingCartItem RemoveProduct(int id, int quantity)
       {
+         if (quantity < 0)
+         {
+            throw new ArgumentOutOfRangeException("Quantity cannot be negative.");
+         }
+
          // Iterate through _products list
          foreach (var item in Products)
          {
-            if (quantity < 0)
-            {
-               throw new ArgumentOutOfRangeException("Quantity cannot be negative.");
-            }
-            else if (quantity >= 0)
+            if (quantity >= 0)
             {
                // Checks if list contains the Id
                if (item.Product.Id == id)
