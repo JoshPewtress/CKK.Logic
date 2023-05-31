@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using CKK.Logic.Exceptions;
 
 namespace CKK.Logic.Models
 {
@@ -15,6 +16,11 @@ namespace CKK.Logic.Models
 
       public StoreItem AddStoreItem(Product prod, int quantity)
       {
+         if (quantity <= 0)
+         {
+            throw new InventoryItemStockTooLowException("Quantity cannot be negative or 0.");
+         }
+
          // Checks for existing item
          foreach (var item in Items)
          {
@@ -34,6 +40,11 @@ namespace CKK.Logic.Models
 
       public StoreItem RemoveStoreItem(int id, int quantity)
       {
+         if (quantity < 0)
+         {
+            throw new ArgumentOutOfRangeException("Quantity cannot be a negative number");
+         }
+
          // Check for matching StoreItem
          foreach (var item in Items)
          {
@@ -52,11 +63,16 @@ namespace CKK.Logic.Models
          }
 
          // No matching item found
-         return null;
+         throw new ProductDoesNotExistException("Product does not exist.");
       }
 
       public StoreItem FindStoreItemById(int id)
       {
+         if (id < 0)
+         {
+            throw new InvalidIdException("Id cannot be less than 0");
+         }
+
          // Queries the _items list to a matching ID
          var storeItem =
             from item in Items

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CKK.Logic.Exceptions;
 
 namespace CKK.Logic.Models
 {
@@ -27,8 +28,22 @@ namespace CKK.Logic.Models
          // Check list for product matching Id
          foreach (var item in Products)
          {
-            // Validate quantity is not negative
-            if (quantity >= 0)
+            // Throw exception if quantity is less than or equal to 0
+            if (quantity <= 0)
+            {
+               throw new InventoryItemStockTooLowException("Quantity must be greater than 0.");
+            }
+            else if (quantity > 0)
+            {
+               if (item.Product.Id == prod.Id)
+               {
+                  item.Quantity = item.Quantity + quantity;
+                  return item;
+               }
+            }
+
+            // Validate quantity is not negative **WIP CODE**
+            /*if (quantity >= 0)
             {
                // Found product, add to quantity
                if (item.Product.Id == prod.Id)
@@ -36,7 +51,7 @@ namespace CKK.Logic.Models
                   item.Quantity = item.Quantity + quantity;
                   return item;
                }
-            }
+            }*/
          }
 
          ShoppingCartItem newCartItem = new ShoppingCartItem(prod, quantity);
@@ -49,8 +64,11 @@ namespace CKK.Logic.Models
          // Iterate through _products list
          foreach (var item in Products)
          {
-            // Validate provided quantity
-            if (quantity >= 0)
+            if (quantity < 0)
+            {
+               throw new ArgumentOutOfRangeException("Quantity cannot be negative.");
+            }
+            else if (quantity >= 0)
             {
                // Checks if list contains the Id
                if (item.Product.Id == id)
@@ -69,13 +87,39 @@ namespace CKK.Logic.Models
                   }
                }
             }
+
+            /* Validate provided quantity **WIP CODE**
+            if (quantity >= 0)
+            {
+               // Checks if list contains the Id
+               if (item.Product.Id == id)
+               {
+                  // Item quantity is enough to remove
+                  if (item.Quantity >= quantity)
+                  {
+                     item.Quantity = item.Quantity - quantity;
+                     return item;
+                  }
+                  // Quantity to remove is too high, remove item
+                  else
+                  {
+                     Products.Remove(item);
+                     return new ShoppingCartItem(new Product(), 0);
+                  }
+               }
+            }*/
          }
          // Product was not found
-         return null;
+         throw new ProductDoesNotExistException("Product does not exist.");
       }
 
       public ShoppingCartItem GetProductById(int id)
       {
+         if (id < 0)
+         {
+            throw new InvalidIdException("Id cannot be less than 0");
+         }
+
          var product =
             from item in Products
             where item.Product.Id.Equals(id)
