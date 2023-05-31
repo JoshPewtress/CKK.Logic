@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CKK.Logic.Exceptions
 {
-   class InvalidIdException : Exception
+   public class InvalidIdException : Exception
    {
       public InvalidIdException() : base("Customer Id number is invalid") { }
 

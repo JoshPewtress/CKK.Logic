@@ -19,6 +19,7 @@ namespace CKK.Logic.Models
             {
                throw new ArgumentOutOfRangeException("Price cannot be a negative number."); 
             }
+            price = value;
          }
       }
    }
