@@ -5,7 +5,7 @@ namespace CKK.Logic.Models
    public class ShoppingCartItem : InventoryItem
    {
 
-      public ShoppingCartItem(Product Product, int Quantity) : base()
+      public ShoppingCartItem(Product Product, int Quantity) : base(Product, Quantity)
       {
       }
 

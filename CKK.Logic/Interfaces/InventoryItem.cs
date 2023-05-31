@@ -13,6 +13,12 @@ namespace CKK.Logic.Interfaces
       private Product product;
       private int quantity;
 
+      public InventoryItem(Product product, int quantity)
+      {
+         Product = product;
+         Quantity = quantity;
+      }
+
       public Product Product
       {
          get
