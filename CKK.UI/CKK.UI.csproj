@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\CKK Logo - Large.png" />
+    <None Remove="Images\CKK Logo - Medium.png" />
+    <None Remove="Images\CKK Logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\CKK Logo - Large.png" />
+    <Resource Include="Images\CKK Logo - Medium.png" />
+    <Resource Include="Images\CKK Logo.png" />
+  </ItemGroup>
+
+</Project>
