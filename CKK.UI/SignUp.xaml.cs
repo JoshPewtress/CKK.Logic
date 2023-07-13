@@ -11,23 +11,20 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using CKK.Logic.Interfaces;
-using CKK.Logic.Models;
 
 namespace CKK.UI
 {
     /// <summary>
-    /// Interaction logic for Login.xaml
+    /// Interaction logic for SignUp.xaml
     /// </summary>
-    public partial class Login : Window
+    public partial class SignUp : Window
     {
-
-        public Login()
+        public SignUp()
         {
             InitializeComponent();
         }
 
-      private void logoImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+      private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
       {
          MainWindow mainWindow = new MainWindow();
          mainWindow.Left = this.Left;
@@ -37,13 +34,13 @@ namespace CKK.UI
          this.Close();
       }
 
-      private void loginButton_Click(object sender, RoutedEventArgs e)
+      private void signUpButton_Click(object sender, RoutedEventArgs e)
       {
-         Home home = new Home();
-         home.Left = this.Left;
-         home.Top = this.Top;
+         Login login = new Login();
+         login.Left = this.Left;
+         login.Top = this.Top;
 
-         home.Show();
+         login.Show();
          this.Close();
       }
    }

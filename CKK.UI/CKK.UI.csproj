@@ -8,15 +8,41 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Hero Image.png" />
+    <None Remove="Images\Cart Icon.png" />
+    <None Remove="Images\CKK Header.png" />
     <None Remove="Images\CKK Logo - Large.png" />
     <None Remove="Images\CKK Logo - Medium.png" />
     <None Remove="Images\CKK Logo.png" />
+    <None Remove="Images\Facebook.png" />
+    <None Remove="Images\Instagram.png" />
+    <None Remove="Images\Mini-Icon.png" />
+    <None Remove="Images\Profile Icon.png" />
+    <None Remove="Images\Twitter.png" />
+    <None Remove="Testimonial1.png" />
+    <None Remove="Testimonial2.png" />
+    <None Remove="Testimonial3.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CKK.Logic\CKK.Logic.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\Facebook.png" />
+    <Resource Include="Images\Hero Image.png" />
+    <Resource Include="Images\Cart Icon.png" />
+    <Resource Include="Images\CKK Header.png" />
     <Resource Include="Images\CKK Logo - Large.png" />
     <Resource Include="Images\CKK Logo - Medium.png" />
     <Resource Include="Images\CKK Logo.png" />
+    <Resource Include="Images\Instagram.png" />
+    <Resource Include="Images\Mini-Icon.png" />
+    <Resource Include="Images\Profile Icon.png" />
+    <Resource Include="Images\Testimonial1.png" />
+    <Resource Include="Images\Testimonial2.png" />
+    <Resource Include="Images\Testimonial3.png" />
+    <Resource Include="Images\Twitter.png" />
   </ItemGroup>
 
 </Project>

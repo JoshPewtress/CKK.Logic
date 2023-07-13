@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using CKK.Logic.Exceptions;
+using System.Threading;
 
 namespace CKK.Logic.Models
 {
@@ -13,6 +14,7 @@ namespace CKK.Logic.Models
    {
 
       private List<StoreItem> Items = new List<StoreItem>();
+      private static int uniqueIdCounter = 0;
 
       public StoreItem AddStoreItem(Product prod, int quantity)
       {
@@ -31,11 +33,22 @@ namespace CKK.Logic.Models
                return item;
             }
          }
+
+         if (prod.Id == 0)
+         {
+            prod.Id = GenerateUniqueId();
+         }
+
          // Did not exist, Create new StoreItem, Add to List
          StoreItem newStoreItem = new StoreItem(prod, quantity);
          Items.Add(newStoreItem);
 
          return newStoreItem;
+      }
+
+      private int GenerateUniqueId()
+      {
+         return Interlocked.Increment(ref uniqueIdCounter);
       }
 
       public StoreItem RemoveStoreItem(int id, int quantity)
@@ -91,6 +104,20 @@ namespace CKK.Logic.Models
       public List<StoreItem> GetStoreItems()
       {
          return Items;
+      }
+
+      // Checks Items list for a matching ID and removes the item from the store
+      public StoreItem DeleteStoreItem(int id)
+      {
+         foreach (var item in Items)
+         {
+            if (item.Product.Id == id)
+            {
+               Items.Remove(item);
+            }
+         }
+
+         return null;
       }
 
    }

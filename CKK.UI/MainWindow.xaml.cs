@@ -1,5 +1,8 @@
-﻿using System;
+﻿using CKK.Logic.Interfaces;
+using CKK.Logic.Models;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xaml;
 
 namespace CKK.UI
 {
@@ -20,6 +24,7 @@ namespace CKK.UI
    /// </summary>
    public partial class MainWindow : Window
    {
+
       public MainWindow()
       {
          InitializeComponent();
@@ -34,5 +39,15 @@ namespace CKK.UI
          login.Show();
          this.Close();
       }
-    }
+
+      private void signUpButton_Click(object sender, RoutedEventArgs e)
+      {
+         SignUp signUp = new SignUp();
+         signUp.Left = this.Left;
+         signUp.Top = this.Top;
+
+         signUp.Show();
+         this.Close();
+      }
+   }
 }
