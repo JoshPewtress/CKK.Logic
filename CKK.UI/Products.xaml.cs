@@ -1,5 +1,6 @@
 ﻿using CKK.Logic.Interfaces;
 using CKK.Logic.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -19,26 +20,38 @@ namespace CKK.UI
    /// </summary>
    public partial class Products : Window
    {
-      private ObservableCollection<StoreItem> productsList;
+      public ObservableCollection<StoreItem> _Items { get; } = new ObservableCollection<StoreItem>();
       private ListView lwInventoryList;
-      private IStore store;
+      private IStore _Store;
+      private EditProductsUserControl editUserControl;
 
       public Products()
       {
          InitializeComponent();
          CreateListView();
 
-         store = new Store();
+         _Store = new Store();
+
+         editUserControl = new EditProductsUserControl(_Store);
+         editUserControl.EditingComplete += EditUserControl_HandleEditingComplete;
+         editUserControl.AddingComplete += EditUserControl_HandleEditingComplete;
+         editUserControl.RemovingComplete += EditUserControl_HandleEditingComplete;
 
          RefreshListView();
+         DisplayListView();
+      }
+
+      private void EditUserControl_HandleEditingComplete(object sender, EventArgs e)
+      {
+         RefreshListView();
+         DisplayListView();
       }
 
       private void CreateListView()
       {
-         productsList = new ObservableCollection<StoreItem>();
          lwInventoryList = new ListView()
          {
-            ItemsSource = productsList,
+            ItemsSource = _Items,
             Background = Brushes.LightGray,
             Margin = new Thickness(10),
             BorderThickness = new Thickness(1),
@@ -86,7 +99,46 @@ namespace CKK.UI
 
       private void SortComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
       {
-         // Sorting logic here
+         // Get the selecte ditem from the SortComboBox
+         var selecteditem = (ComboBoxItem)SortComboBox.SelectedItem;
+
+         // Get the selected value from the ComboBox
+         var selectedSort = selecteditem.Content.ToString();
+
+         // Apply sorting based on the selected value
+         switch (selectedSort)
+         {
+            case "Name":
+               SortByName();
+               break;
+            case "ID":
+               SortByID();
+               break;
+            default:
+               break;
+         }
+      }
+
+      private void SortByName()
+      {
+         var sortedItems = _Items.OrderBy(item => item.Product.Name).ToList();
+         UpdateListViewItems(sortedItems);
+      }
+
+      private void SortByID()
+      {
+         var sortedItems = _Items.OrderBy(item => item.Product.Id).ToList();
+         UpdateListViewItems(sortedItems);
+      }
+
+      private void UpdateListViewItems(List<StoreItem> sortedItems)
+      {
+         _Items.Clear();
+         foreach (var item in sortedItems)
+         {
+            _Items.Add(item);
+         }
+         DisplayListView();
       }
 
       private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -115,36 +167,32 @@ namespace CKK.UI
 
       private void DisplayEditArea()
       {
-         var editProductsUC = new EditProductsUserControl(store);
-         editProductsUC.EditingComplete += OnEditingComplete;
-
          if (DisplayControl.Content != null)
          {
             DisplayControl.Content = null;
          }
 
-         DisplayControl.Content = editProductsUC;
+         DisplayControl.Content = editUserControl;
       }
 
       private void DisplayListView()
       {
+         if (DisplayControl.Content != null)
+         {
+            DisplayControl.Content = null;
+         }
          DisplayControl.Content = lwInventoryList;
+         lwInventoryList.Visibility = Visibility.Visible;
       }
 
       public void RefreshListView()
       {
-         productsList.Clear();
+         _Items.Clear();
 
-         foreach (var storeItem in store.GetStoreItems())
+         foreach (var storeItem in _Store.GetStoreItems())
          {
-            productsList.Add(storeItem);
+            _Items.Add(storeItem);
          }
-      }
-
-      private void OnEditingComplete(object sender, RoutedEventArgs e)
-      {
-         RefreshListView();
-         lwInventoryList.Visibility = Visibility.Visible;
       }
    }
 }

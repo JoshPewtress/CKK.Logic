@@ -22,14 +22,14 @@ namespace CKK.UI
    /// </summary>
    public partial class RemoveProductUserControl : UserControl
    {
-      private IStore store;
+      private IStore _Store;
 
-      public event Action OnEditingComplete;
+      public event EventHandler EditingComplete;
 
       public RemoveProductUserControl(IStore store)
       {
          InitializeComponent();
-         this.store = store;
+         this._Store = store;
       }
 
       private void ConfirmButton_Click(object sender, RoutedEventArgs e)
@@ -37,9 +37,14 @@ namespace CKK.UI
          int productId = int.Parse(ProductIdTextBox.Text);
          int productQuantity = int.Parse(QuantityTextBox.Text);
 
-         store.RemoveStoreItem(productId, productQuantity);
+         _Store.RemoveStoreItem(productId, productQuantity);
 
-         OnEditingComplete?.Invoke();
+         OnEditingComplete();
+      }
+
+      protected virtual void OnEditingComplete()
+      {
+         EditingComplete?.Invoke(this, EventArgs.Empty);
       }
    }
 }

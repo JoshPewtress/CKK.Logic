@@ -22,14 +22,14 @@ namespace CKK.UI
    /// </summary>
    public partial class AddProductUserControl : UserControl
    {
-      private IStore store;
+      private IStore _Store;
 
-      public event Action OnEditingComplete;
+      public event EventHandler EditingComplete;
 
       public AddProductUserControl(IStore store)
       {
          InitializeComponent();
-         this.store = store;
+         this._Store = store;
       }
 
       private void ConfirmButton_Click(object sender, RoutedEventArgs e)
@@ -46,9 +46,14 @@ namespace CKK.UI
             Price = productPrice,
          };
 
-         store.AddStoreItem(product, productQuantity);
+         _Store.AddStoreItem(product, productQuantity);
 
-         OnEditingComplete?.Invoke();
+         OnEditingComplete();
+      }
+
+      protected virtual void OnEditingComplete()
+      {
+         EditingComplete?.Invoke(this, EventArgs.Empty);
       }
    }
 }

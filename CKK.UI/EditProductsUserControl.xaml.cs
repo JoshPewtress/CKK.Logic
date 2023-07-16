@@ -21,20 +21,22 @@ namespace CKK.UI
    /// </summary>
    public partial class EditProductsUserControl : UserControl
    {
-      private IStore store;
+      private IStore _Store;
 
       public event EventHandler EditingComplete;
+      public event EventHandler AddingComplete;
+      public event EventHandler RemovingComplete;
 
       public EditProductsUserControl(IStore store)
       {
          InitializeComponent();
-         this.store = store;
+         this._Store = store;
       }
 
       private void AddProductButton_Click(object sender, RoutedEventArgs e)
       {
-         var addProductUC = new AddProductUserControl(store);
-         addProductUC.ProductAdded
+         var addProductUC = new AddProductUserControl(_Store);
+         addProductUC.EditingComplete += AddProductUC_EditingComplete;
          
          if (DisplayFrame.Content != null)
          {
@@ -46,8 +48,8 @@ namespace CKK.UI
 
       private void RemoveProductButton_Click(object sender, RoutedEventArgs e)
       {
-         var removeProductUC = new RemoveProductUserControl(store);
-         removeProductUC.OnEditingComplete += HandleEditingComplete;
+         var removeProductUC = new RemoveProductUserControl(_Store);
+         removeProductUC.EditingComplete += RemoveProductUC_EditingComplete;
 
          if (DisplayFrame.Content != null)
          {
@@ -57,9 +59,19 @@ namespace CKK.UI
          DisplayFrame.Content = removeProductUC;
       }
 
-      private void HandleEditingComplete()
+      private void AddProductUC_EditingComplete(object sender, EventArgs e)
       {
-         OnEditingComplete?.Invoke();
+         AddingComplete?.Invoke(this, EventArgs.Empty);
+      }
+
+      private void RemoveProductUC_EditingComplete(Object sender, EventArgs e)
+      {
+         RemovingComplete?.Invoke(this, EventArgs.Empty);
+      }
+
+      private void OnEditingComplete(object sender, RoutedEventArgs e)
+      {
+         EditingComplete?.Invoke(this, EventArgs.Empty);
       }
    }
 }
