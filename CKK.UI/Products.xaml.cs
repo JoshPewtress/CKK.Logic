@@ -1,5 +1,6 @@
 ﻿using CKK.Logic.Interfaces;
 using CKK.Logic.Models;
+using CKK.Persistance.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,7 +31,7 @@ namespace CKK.UI
          InitializeComponent();
          CreateListView();
 
-         _Store = new Store();
+         _Store = new FileStore();
 
          editUserControl = new EditProductsUserControl(_Store);
          editUserControl.EditingComplete += EditUserControl_HandleEditingComplete;
