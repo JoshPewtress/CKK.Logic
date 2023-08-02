@@ -198,5 +198,140 @@ namespace CKK.Persistance.Models
          }
       }
 
+      public List<StoreItem> GetAllProductsByName(string name)
+      {
+         // create a new list to hold the StoreItems in Items. Sorted by name
+         List<StoreItem> sortedItems = Items.OrderBy(item => item.Product.Name).ToList();
+         List<StoreItem> foundItems = new List<StoreItem>();
+
+         foreach (var item in sortedItems)
+         {
+            // call String.IndexOf to check for a substring match (case-insensitive)
+            if (item.Product.Name.IndexOf(name, StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+               foundItems.Add(item);
+            }
+         }
+
+         return foundItems;
+      }
+
+      public List<StoreItem> GetProductsByQuantity()
+      {
+         List<StoreItem> sorteditems = MergeSortByQuantity(Items);
+         return sorteditems;
+      }
+
+      private List<StoreItem> MergeSortByQuantity(List<StoreItem> list)
+      {
+         // check for default case where list is only 1 element long
+         if (list.Count <= 1)
+         {
+            return list;
+         }
+
+         int middleIndex = list.Count / 2;
+         List<StoreItem> left = list.GetRange(0, middleIndex);
+         List<StoreItem> right = list.GetRange(middleIndex, list.Count - middleIndex);
+
+         left = MergeSortByQuantity(left);
+         right = MergeSortByQuantity(right);
+
+         return MergeByQuantity(left, right);
+      }
+
+      private List<StoreItem> MergeByQuantity(List<StoreItem> left, List<StoreItem> right)
+      {
+         List<StoreItem> mergedItems = new List<StoreItem>();
+         int leftIndex = 0;
+         int rightIndex = 0;
+
+         while (leftIndex < left.Count && rightIndex < right.Count)
+         {
+            if (left[leftIndex].Quantity >= right[rightIndex].Quantity)
+            {
+               mergedItems.Add(left[leftIndex]);
+               leftIndex++;
+            }
+            else
+            {
+               mergedItems.Add(right[rightIndex]);
+               rightIndex++;
+            }
+         }
+
+         while (leftIndex < left.Count)
+         {
+            mergedItems.Add(left[leftIndex]);
+            leftIndex++;
+         }
+
+         while (rightIndex < right.Count)
+         {
+            mergedItems.Add(right[rightIndex]);
+            rightIndex++;
+         }
+
+         return mergedItems;
+      }
+
+      public List<StoreItem> GetProductsByPrice()
+      {
+         List<StoreItem> sortedItems = MergeSortByPrice(Items);
+         return sortedItems;
+      }
+
+      private List<StoreItem> MergeSortByPrice(List<StoreItem> list)
+      {
+         if (list.Count <= 1)
+         {
+            return list;
+         }
+
+         int middleIndex = list.Count / 2;
+         List<StoreItem> left = list.GetRange(0, middleIndex);
+         List<StoreItem> right = list.GetRange(middleIndex, list.Count - middleIndex);
+
+         left = MergeSortByPrice(left);
+         right = MergeSortByPrice(right);
+
+         return MergeByPrice(left, right);
+      }
+
+      private List<StoreItem> MergeByPrice(List<StoreItem> left, List<StoreItem> right)
+      {
+         List<StoreItem> mergedItems = new List<StoreItem>();
+         int leftIndex = 0;
+         int rightIndex = 0;
+
+         while (leftIndex < left.Count && rightIndex < right.Count)
+         {
+            if (left[leftIndex].Product.Price >= right[rightIndex].Product.Price)
+            {
+               mergedItems.Add(left[leftIndex]);
+               leftIndex++;
+            }
+            else
+            {
+               mergedItems.Add(right[rightIndex]);
+               rightIndex++;
+            }
+         }
+
+         while (leftIndex < left.Count)
+         {
+            mergedItems.Add(left[leftIndex]);
+            leftIndex++;
+         }
+
+         while (rightIndex < right.Count)
+         {
+            mergedItems.Add(right[rightIndex]);
+            rightIndex++;
+         }
+
+         return mergedItems;
+      }
+
    }
 }

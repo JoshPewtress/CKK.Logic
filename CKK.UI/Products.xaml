@@ -42,7 +42,8 @@
                    MouseLeftButtonDown="Image_MouseLeftButtonDown"/>
 
             <TextBox x:Name="SearchBox" Width="163" 
-                     Margin="20 5"/>
+                     Margin="20 5"
+                     KeyUp="SearchBox_KeyUp"/>
 
             <Image Source="Images/Profile Icon.png" MaxWidth="35" 
                    MaxHeight="35" Margin="5 0" />

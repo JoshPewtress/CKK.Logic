@@ -195,5 +195,30 @@ namespace CKK.UI
             _Items.Add(storeItem);
          }
       }
+
+      private void SearchBox_KeyUp(object sender, KeyEventArgs e)
+      {
+         if (e.Key == Key.Enter)
+         {
+            string searchTerm = SearchBox.Text.Trim();
+
+            // Call GetAllProductsByName method to get the search results
+            List<StoreItem> searchResults = _Store.GetAllProductsByName(searchTerm);
+
+            if (searchResults.Any())
+            {
+               string message = "Search Results:\n\n";
+               foreach (var item in searchResults)
+               {
+                  message += $"{item.Product.Name} - Price: {item.Product.Price:C} - Quantity: {item.Quantity}\n";
+               }
+               MessageBox.Show(message, "Search Results", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+               MessageBox.Show("No matching items found.", "Search Results", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+         }
+      }
    }
 }
