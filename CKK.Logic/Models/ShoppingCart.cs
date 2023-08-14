@@ -10,23 +10,20 @@ namespace CKK.Logic.Models
 {
    public class ShoppingCart : IShoppingCart
    {
-      private Customer Customer;
-      private List<ShoppingCartItem> Products = new List<ShoppingCartItem>();
+      int ShoppingCartId { get; set; }
+      int CustomerId { get; set; }
+      public Customer Customer { get; set; }
+      public List<ShoppingCartItem> ShoppingCartItems { get; set; } = new List<ShoppingCartItem>();
 
       public ShoppingCart(Customer cust)
       {
          Customer = cust;
       }
 
-      public int GetCustomerId()
-      {
-         return Customer.Id;
-      }
-
       public ShoppingCartItem AddProduct(Product prod, int quantity)
       {
          // Check list for product matching Id
-         foreach (var item in Products)
+         foreach (var item in ShoppingCartItems)
          {
             // Throw exception if quantity is less than or equal to 0
             if (quantity <= 0)
@@ -41,21 +38,10 @@ namespace CKK.Logic.Models
                   return item;
                }
             }
-
-            // Validate quantity is not negative **WIP CODE**
-            /*if (quantity >= 0)
-            {
-               // Found product, add to quantity
-               if (item.Product.Id == prod.Id)
-               {
-                  item.Quantity = item.Quantity + quantity;
-                  return item;
-               }
-            }*/
          }
 
          ShoppingCartItem newCartItem = new ShoppingCartItem(prod, quantity);
-         Products.Add(newCartItem);
+         ShoppingCartItems.Add(newCartItem);
          return newCartItem;
       }
 
@@ -67,7 +53,7 @@ namespace CKK.Logic.Models
          }
 
          // Iterate through _products list
-         foreach (var item in Products)
+         foreach (var item in ShoppingCartItems)
          {
             if (quantity >= 0)
             {
@@ -83,33 +69,13 @@ namespace CKK.Logic.Models
                   // Quantity to remove is too high, remove item
                   else
                   {
-                     Products.Remove(item);
+                     ShoppingCartItems.Remove(item);
                      return new ShoppingCartItem(new Product(), 0);
                   }
                }
             }
-
-            /* Validate provided quantity **WIP CODE**
-            if (quantity >= 0)
-            {
-               // Checks if list contains the Id
-               if (item.Product.Id == id)
-               {
-                  // Item quantity is enough to remove
-                  if (item.Quantity >= quantity)
-                  {
-                     item.Quantity = item.Quantity - quantity;
-                     return item;
-                  }
-                  // Quantity to remove is too high, remove item
-                  else
-                  {
-                     Products.Remove(item);
-                     return new ShoppingCartItem(new Product(), 0);
-                  }
-               }
-            }*/
          }
+
          // Product was not found
          throw new ProductDoesNotExistException("Product does not exist.");
       }
@@ -122,7 +88,7 @@ namespace CKK.Logic.Models
          }
 
          var product =
-            from item in Products
+            from item in ShoppingCartItems
             where item.Product.Id.Equals(id)
             select item;
 
@@ -138,16 +104,11 @@ namespace CKK.Logic.Models
       {
          // Queries _product for the total of each element and uses Sum() to add them
          var total =
-            (from item in Products
+            (from item in ShoppingCartItems
              where item.GetTotal() > 0
              select item.GetTotal()).Sum();
 
          return total;
-      }
-
-      public List<ShoppingCartItem> GetProducts()
-      {
-         return Products;
       }
    }
 }
