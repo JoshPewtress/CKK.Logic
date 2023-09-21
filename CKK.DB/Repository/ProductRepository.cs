@@ -15,11 +15,11 @@ namespace CKK.DB.Repository
 
       public int Add(Product entity)
       {
-         var sql = "Insert into Products (Price,Quantity,Name) VALUES (@Price,@Quantity,@Name)";
+         var sql = "Insert into Products (Id,Price,Quantity,Name) VALUES (@Id,@Price,@Quantity,@Name)";
 
          using (var connection = _connectionFactory.GetConnection)
          {
-            connection.Open();
+            //connection.Open();
             var result = connection.Execute(sql, entity);
             return result;
          }
@@ -75,7 +75,7 @@ namespace CKK.DB.Repository
 
       public int Update(Product entity)
       {
-         var sql = "UPDATE Products SET Price = @Price, Quantity = @Quantity, Name = @Name WHERE Id = @Id";
+         var sql = "UPDATE Products SET Price = @Price, Quantity = @Quantity, Name = @Name";
 
          using (var connection = _connectionFactory.GetConnection)
          {

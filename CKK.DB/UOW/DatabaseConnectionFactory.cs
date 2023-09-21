@@ -1,5 +1,4 @@
 ﻿using CKK.DB.Interfaces;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,17 +7,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
+using System.Configuration.Internal;
 
 namespace CKK.DB.UOW
 {
    public class DatabaseConnectionFactory : IConnectionFactory
    {
-      public string CnnVal(string name)
+      public static string CnnVal(string name)
       {
-         return connectionString;
+         return ConfigurationManager.ConnectionStrings[name].ConnectionString;
       }
 
-      private readonly string connectionString = "Data Source = (localdb)\\MSSQLLocalDB;Initial Catalog = StructuredProjectDB";
+      private readonly string connectionString = "Data Source = (localdb)\\MSSQLLocalDB;Initial Catalog = StructuredProjectDB;";
 
       public IDbConnection GetConnection
       {

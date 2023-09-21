@@ -28,43 +28,93 @@ namespace CKK.DB.Repository
 
       public ShoppingCartItem AddToCart(int ShoppingCartId, int ProductId, int quantity)
       {
-         var cartCheck = "SELECT * FROM ShoppingCartItems WHERE ShoppingCartId = @ShoppingCartId";
-
-         using (var connection = _connectionFactory.GetConnection)
+         using (var conn = _connectionFactory.GetConnection)
          {
-            connection.Open();
-            var existingShoppingCart = connection.QuerySingleOrDefault<ShoppingCartItem>(cartCheck, new { ShoppingCartId = ShoppingCartId });
+            ProductRepository _productRepository = new ProductRepository(_connectionFactory);
+            var item = _productRepository.GetById(ProductId);
+            var productItems = GetProducts(ShoppingCartId).Find(x => x.ProductId == ProductId);
 
-            if (existingShoppingCart != null)
+            var shopItem = new ShoppingCartItem()
             {
-               
+               ShoppingCartId = ShoppingCartId,
+               ProductId = ProductId,
+               Quantity = quantity
+            };
+
+            if (item.Quantity >= quantity)
+            {
+               if (productItems != null)
+               {
+                  // Product already in cart so update quantity
+                  var test = Update(shopItem);
+               }
+               else
+               {
+                  // New product for the cart so add it
+                  var test = Add(shopItem);
+               }
             }
+
+            return shopItem;
          }
       }
 
       public int ClearCart(int ShoppingCartId)
       {
-         throw new NotImplementedException();
+         var sql = "DELETE FROM ShoppingCartItems WHERE ShoppingCartId = @ShoppingCartId";
+
+         using (var conn = _connectionFactory.GetConnection)
+         {
+            var result = conn.Execute(sql, new { ShoppingCartId = ShoppingCartId });
+            return result;
+         }
       }
 
       public List<ShoppingCartItem> GetProducts(int ShoppingCartId)
       {
-         throw new NotImplementedException();
+         var sql = "SELECT * FROM ShoppingCartItems WHERE ShoppingCartId = @ShoppingCartId";
+
+         using (var conn = _connectionFactory.GetConnection)
+         {
+            return conn.Query<ShoppingCartItem>(sql, new { ShoppingCartId = ShoppingCartId }).ToList();
+         }
       }
 
       public decimal GetTotal(int ShoppingCartId)
       {
-         throw new NotImplementedException();
+         using (var conn = _connectionFactory.GetConnection)
+         {
+            var shoppingCarts = GetProducts(ShoppingCartId);
+            decimal total = 0;
+
+            foreach (var item in shoppingCarts)
+            {
+               total += item.GetTotal();
+            }
+
+            return total;
+         }
       }
 
       public void Ordered(int ShoppingCartId)
       {
-         throw new NotImplementedException();
+         var sql = "DELETE * FROM ShoppingCartItems WHERE ShoppingCartId = @ShoppingCartId";
+
+         using (var conn = _connectionFactory.GetConnection)
+         {
+            conn.Execute(sql, new { ShoppingCartId = ShoppingCartId });
+         }
       }
 
       public int Update(ShoppingCartItem entity)
       {
-         throw new NotImplementedException();
+         var sql = "UPDATE ShoppingCartItems SET ShoppingCartId = @ShoppingCartId, ProductId = @ProductId, Quantity = @Quantity";
+
+         using (var conn = _connectionFactory.GetConnection)
+         {
+            var result = conn.Execute(sql, entity);
+            return result;
+         }
       }
    }
 }
