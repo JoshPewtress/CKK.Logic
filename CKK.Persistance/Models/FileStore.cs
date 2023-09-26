@@ -10,14 +10,19 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using CKK.Logic.Models;
 using CKK.Logic.Exceptions;
+using CKK.DB.Interfaces;
+using CKK.DB.UOW;
+using Dapper;
 
 namespace CKK.Persistance.Models
 {
    public class FileStore : IStore//, ISavable, ILoadable
    {
       //private List<StoreItem> Items = new List<StoreItem>();
+      IConnectionFactory conn = new DatabaseConnectionFactory();
+      IUnitOfWork _unitOfWork;
+
       public string FilePath { get; }
-      private int IdCounter = 0;
 
       public FileStore()
       {
@@ -27,6 +32,8 @@ namespace CKK.Persistance.Models
          // Set the filePath after ensuring the folder exists
          FilePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + Path.DirectorySeparatorChar +
          "Persistance" + Path.DirectorySeparatorChar + "StoreItems.dat";
+
+         _unitOfWork = new UnitOfWork(conn);
       }
 
       //public StoreItem AddStoreItem(Product prod, int quantity)
@@ -63,7 +70,23 @@ namespace CKK.Persistance.Models
 
       private int GenerateUniqueId()
       {
-         return ++IdCounter;
+         var sql = "SELECT * from Products";
+
+         using (var connection = conn.GetConnection)
+         {
+            var result = connection.Query<Product>(sql).ToList();
+
+            var highestId = result.Max(x => x.Id);
+
+            if (highestId == 0)
+            {
+               return 1;
+            }
+            else
+            {
+               return highestId + 1;
+            }
+         }
       }
 
       //public StoreItem RemoveStoreItem(int id, int quantity)

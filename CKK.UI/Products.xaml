@@ -74,7 +74,7 @@
         <!-- Sort By Combobox -->
         <ComboBox x:Name="SortComboBox" Grid.Row="3" Grid.Column="1"
                   Grid.ColumnSpan="2" Margin="10 0" FontSize="18"
-                  >
+                  SelectionChanged="SortComboBox_SelectionChanged">
             <ComboBoxItem Content="Name" />
             <ComboBoxItem Content="ID" />
         </ComboBox>
@@ -101,35 +101,38 @@
         <StackPanel x:Name="editPanel" Grid.Row="4" Grid.Column="1"
                     Grid.ColumnSpan="3" Margin="10 10 15 10" Width="328"
                     Visibility="Collapsed" Orientation="Vertical">
-            
+
             <StackPanel Orientation="Horizontal" Margin="0 50 0 0">
                 <TextBlock Text="Name" Margin="0 0 39 0"/>
                 <TextBox x:Name="nameTextBox" Width="200" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="0 5">
-                <TextBlock Text="Id" Margin="0 0 84 0" />
-                <TextBox x:Name="idTextBox" Width="200" />
-            </StackPanel>
-
-            <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Price" Margin="0 0 52 0" />
                 <TextBox x:Name="priceTextBox" Width="200" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Margin="0 5">
+            <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Quantity" Margin="0 0 10 0" />
                 <TextBox x:Name="quantityTextBox" Width="200" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" 
-                        Margin="0 10">
-                <Button x:Name="addButton" Content="Add" Margin="10 0" 
-                        Padding="10 0" Click="addButton_Click" />
-                <Button x:Name="removeButton" Content="Remove" 
-                        Margin="10 0" Padding="10 0" />
-            </StackPanel>
+            <Button x:Name="addButton" Content="Add" Margin="40 10" 
+                Click="addButton_Click" />
+                
             
+
+            <StackPanel Orientation="Horizontal" Margin="0 5">
+                <TextBlock Text="Id" Margin="0 0 84 0" />
+                <TextBox x:Name="idTextBox" Width="200" />
+            </StackPanel>
+
+            <Button x:Name="removeButton" Content="Remove" Margin="40 10" 
+                Click="removeButton_Click" />
+
+            <Button x:Name="updateButton" Content="Update" Margin="40 0" 
+                Click="updateButton_Click" />
+
         </StackPanel>
 
         <!-- Footer -->

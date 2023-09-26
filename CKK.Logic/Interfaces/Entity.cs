@@ -16,9 +16,8 @@ namespace CKK.Logic.Interfaces
       public int Id
       {
          get
-         {
-            return id;
-         }
+            { return id; }
+
          set
          {
             if (value < 0)

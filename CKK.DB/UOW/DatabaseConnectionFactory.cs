@@ -18,7 +18,7 @@ namespace CKK.DB.UOW
          return ConfigurationManager.ConnectionStrings[name].ConnectionString;
       }
 
-      private readonly string connectionString = "Data Source = (localdb)\\MSSQLLocalDB;Initial Catalog = StructuredProjectDB;";
+      private readonly string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;Initial Catalog=StucturedProjectDB;Integrated Security=True";
 
       public IDbConnection GetConnection
       {
@@ -28,7 +28,6 @@ namespace CKK.DB.UOW
             var factory = DbProviderFactories.GetFactory("System.Data.SqlClient");
             var conn = factory.CreateConnection();
             conn.ConnectionString = connectionString;
-            //conn.Open();
             return conn;
          }
       }

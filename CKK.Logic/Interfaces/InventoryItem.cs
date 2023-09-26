@@ -22,24 +22,16 @@ namespace CKK.Logic.Interfaces
 
       public Product Product
       {
-         get
-         {
-            return product;
-         }
-         set
-         {
-            product = value;
-         }
+         get { return product; }
+
+         set { product = value; }
       }
 
       public int Quantity
       {
-         get
-         {
-            return quantity;
-         }
-         set
-         {
+         get { return quantity; }
+
+         set {
             if (value < 0)
             {
                throw new InventoryItemStockTooLowException();
