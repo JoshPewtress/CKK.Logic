@@ -1,0 +1,42 @@
+﻿@using CKK.Logic.Models;
+@using CKK.DB.UOW;
+@using CKK.DB.Interfaces;
+
+@page "/products"
+
+<form method="get">
+	<input type="hidden" value="@order.OrderId" />
+	<p style="color: blue; font-size: x-large">Products all year long.</p>
+	<div class="row">
+		@foreach (var item in uow.Products.GetAll())
+		{
+			<div class="card" style="width: max-content; padding: 5px;">
+				<div class="card-body">
+					<img src="images/cat_food.png" width="150" />
+					<p class="card-text">@item.Price.ToString("c")</p>
+					<p class="card-text">Quantity Available: @item.Quantity</p>
+				</div>
+			</div>
+		}
+	</div>
+</form>
+
+@code {
+	private Order order;
+	[Inject]
+	private IUnitOfWork uow { get; set; } = null;
+
+	protected override async Task OnInitializedAsync()
+	{
+		if (uow != null)
+		{
+			order = uow.Orders.GetById(1);
+			if (order == null)
+			{
+				Order newOrder = new Order() { OrderId = 1, OrderNumber = "1", CustomerId = 1, ShoppingCartId = 100 };
+				order = newOrder;
+				uow.Orders.Add(newOrder);
+			}
+		}
+	}
+}
