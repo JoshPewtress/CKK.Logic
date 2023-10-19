@@ -10,21 +10,29 @@
 	<div class="row">
 		@foreach (var item in uow.Products.GetAll())
 		{
-			<div class="card" style="width: max-content; padding: 5px;">
+			<div class="card" style="width: 18rem; padding: 5px;">
 				<div class="card-body">
-					<img src="images/cat_food.png" width="150" />
+					<h5 class="card-title text-center">@item.Name</h5>
 					<p class="card-text">@item.Price.ToString("c")</p>
 					<p class="card-text">Quantity Available: @item.Quantity</p>
+					<br />
+				</div>
+				<div class="card-footer">
+					<input class="num-spinner" id="spinner-@item.Id" @onchange="@(e => spinnerChange(item.Id, e.Value))"
+						   style="padding: 10px; width: 75%;" type="number" value="0" min="0" max="@item.Quantity" step="1" />
 				</div>
 			</div>
 		}
 	</div>
+	<p>The Check Out button removes inventory based on your shopping cart and deletes your order and shopping cart.</p>
 </form>
+@*<a id="CheckoutBtn" @onclick="CheckOut" class="btn btn-success btn-lg btn-block">@checkOutTotal</a>*@
 
 @code {
 	private Order order;
 	[Inject]
-	private IUnitOfWork uow { get; set; } = null;
+	private IUnitOfWork uow { get; set; } = null!;
+	string checkOutTotal = "Check Out - .00";
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -39,4 +47,32 @@
 			}
 		}
 	}
+
+	protected void spinnerChange(int productId, object value)
+	{
+		var item = uow.ShoppingCarts.AddToCart(order.ShoppingCartId, productId, Convert.ToInt16(value));
+		UpdateTotal();
+	}
+
+	private void UpdateTotal()
+	{
+		var total = uow.ShoppingCarts.GetTotal(order.ShoppingCartId).ToString("c");
+		checkOutTotal = "Check Out - " + total;
+	}
+
+	//protected void CheckOut()
+	//{
+	//	var inventory = uow.Products.GetAll();
+
+	//	var cartItems = uow.ShoppingCarts.GetProducts(order.ShoppingCartId);
+	//	foreach (var item in cartItems)
+	//	{
+	//		Product prod = inventory.Where(x => x.Id == item.ProductId).FirstOrDefault();
+	//		prod.Quantity -= item.Quantity;
+	//		uow.Products.Update(prod);
+	//	}
+
+	//	uow.Orders.Delete(1);
+	//	uow.ShoppingCarts.ClearCart(order.ShoppingCartId);
+	//}
 }
