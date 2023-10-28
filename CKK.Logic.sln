@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CKK.Persistance", "CKK.Pers
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CKK.DB", "CKK.DB\CKK.DB.csproj", "{49CEDF2B-8823-4BFE-B06C-AD2202A7F7BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CKK.Web", "CKK.Web\CKK.Web.csproj", "{B2DC5DC0-D97C-4663-8AD0-6D2B02A6A21F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CKK.Web", "CKK.Web\CKK.Web.csproj", "{B2DC5DC0-D97C-4663-8AD0-6D2B02A6A21F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

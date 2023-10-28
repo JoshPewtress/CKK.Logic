@@ -85,22 +85,27 @@ namespace CKK.DB.Repository
 
 			using (var conn = _connectionFactory.GetConnection)
 			{
-				var result = conn.Query<decimal>(sql, new { ShoppingCartId = ShoppingCartId });
-				decimal total = 0;
-
-				foreach (var item in result)
+				if (GetProducts(ShoppingCartId) != null)
 				{
-					if (item == null)
+					var result = conn.Query<decimal>(sql, new { ShoppingCartId = ShoppingCartId });
+					decimal total = 0;
+
+					foreach (var item in result)
 					{
-						return 0;
+						if (item == null)
+						{
+							return 0;
+						}
+						else
+						{
+							total += (decimal)item;
+						}
 					}
-					else
-					{
-						total += (decimal)item;
-					}
+
+					return total;
 				}
 
-				return total;
+				return 0;
 			}
 		}
 

@@ -1,0 +1,87 @@
+﻿@using CKK.Logic.Models;
+@using CKK.DB.UOW;
+@using CKK.DB.Interfaces;
+@inject NavigationManager NavManager
+
+@page "/shoppingCart"
+
+	<table class="table" style="width: 70%;">
+		<thead>
+			<tr>
+				<th>Product</th>
+				<th>Quantity</th>
+				<th>Price</th>
+			</tr>
+		</thead>
+		<tbody>
+				@foreach (var item in uow.ShoppingCarts.GetProducts(order.ShoppingCartId))
+				{
+					if (item.Quantity != 0)
+					{
+						<tr>
+							<td>@uow.Products.GetById(item.ProductId).Name</td>
+							<td>@item.Quantity</td>
+							<td>@uow.Products.GetById(item.ProductId).Price</td>
+						</tr>
+					}
+				}
+		</tbody>
+	</table>
+
+	<br />
+
+	<table class="table" style="width: 30%;">
+		<thead>
+			<tr>
+				<th>Total</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+			<td>@if (uow.ShoppingCarts.GetProducts(order.ShoppingCartId).Count != 0)
+				{
+					decimal total = uow.ShoppingCarts.GetTotal(order.ShoppingCartId);
+					var formattedTotal = total.ToString("C");
+				
+					@formattedTotal
+				}
+				else
+				{
+					@total.ToString("c");
+				}
+			</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<button @onclick="PlaceOrder" type="button" class="btn btn-success border-2">Place Order</button>
+
+@code {
+	private Order order;
+	decimal total = 0;
+
+	[Inject]
+	private IUnitOfWork uow { get; set; } = null!;
+
+	protected override async Task OnInitializedAsync()
+	{
+		if (uow != null)
+		{
+			order = uow.Orders.GetById(1);
+			if (order == null)
+			{
+				Order newOrder = new Order() { OrderId = 1, OrderNumber = "1", CustomerId = 1, ShoppingCartId = 100 };
+				order = newOrder;
+				uow.Orders.Add(newOrder);
+			}
+		}
+	}
+
+	protected void PlaceOrder()
+	{
+		uow.Orders.Delete(1);
+		uow.ShoppingCarts.ClearCart(order.ShoppingCartId);
+
+		NavManager.NavigateTo("/checkout");
+	}
+}
