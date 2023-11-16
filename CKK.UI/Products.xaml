@@ -31,8 +31,10 @@
         <!-- Header -->
         <DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" 
                    Style="{StaticResource DockPanelStyle}">
+            
             <Image Source="Images/Mini-Icon.png" MaxWidth="45"
-                   MaxHeight="45" Margin="5 0" DockPanel.Dock="Left" Cursor="Hand" />
+                   MaxHeight="45" Margin="5 0" DockPanel.Dock="Left" Cursor="Hand"
+                   MouseLeftButtonDown="Image_MouseLeftButtonDown"/>
 
             <TextBox x:Name="SearchBox" MinWidth="163" Margin="20 5"
                      DockPanel.Dock="Left" HorizontalAlignment="Stretch"
