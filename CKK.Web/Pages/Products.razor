@@ -27,10 +27,6 @@
 						</button>
 					</div>
 				</div>
-				<div class="card-footer">
-					<input class="num-spinner" id="spinner-@item.Id" @onchange="@(e => spinnerChange(item.Id, e.Value))"
-						   style="padding: 10px; width: 75%;" type="number" value="0" min="0" max="@item.Quantity" step="1" />
-				</div>
 			</div>
 		}
 	</div>
@@ -59,12 +55,18 @@
 	protected void spinnerChange(int productId, object value)
 	{
 		var item = uow.ShoppingCarts.AddToCart(order.ShoppingCartId, productId, Convert.ToInt16(value));
-		UpdateTotal();
 	}
 
-	private void UpdateTotal()
+	protected void AddToCart()
 	{
-		var total = uow.ShoppingCarts.GetTotal(order.ShoppingCartId).ToString("c");
-		checkOutTotal = "Check Out - " + total;
+		var inventory = uow.Products.GetAll();
+
+		var cartItems = uow.ShoppingCarts.GetProducts(order.ShoppingCartId);
+		foreach (var item in cartItems)
+		{
+			Product prod = inventory.Where(x => x.Id == item.ProductId).FirstOrDefault();
+			prod.Quantity -= item.Quantity;
+			uow.Products.Update(prod);
+		}
 	}
 }
