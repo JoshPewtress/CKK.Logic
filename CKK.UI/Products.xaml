@@ -7,98 +7,86 @@
         mc:Ignorable="d" FontSize="25"
         Title="Products" Height="800" Width="358">
     <Window.Resources>
-        <Style x:Key="HeaderStyle" TargetType="StackPanel">
-            <Setter Property="Grid.Column" Value="0" />
-            <Setter Property="Grid.ColumnSpan" Value="5" />
-            <Setter Property="HorizontalAlignment" Value="Left" />
-            <Setter Property="Orientation" Value="Horizontal" />
+        <Style x:Key="DockPanelStyle" TargetType="DockPanel">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="Background" Value="Gray" />
         </Style>
     </Window.Resources>
     <Grid>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="5" />
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="1" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="45" />
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <StackPanel Grid.Row="1" Style="{StaticResource HeaderStyle}">
+        <DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" 
+                   Style="{StaticResource DockPanelStyle}">
+            <Image Source="Images/Mini-Icon.png" MaxWidth="45"
+                   MaxHeight="45" Margin="5 0" DockPanel.Dock="Left" Cursor="Hand" />
 
-            <Image Source="Images/Mini-Icon.png" MaxWidth="45" 
-                   MaxHeight="45" Margin="5 0" 
-                   MouseLeftButtonDown="Image_MouseLeftButtonDown"/>
+            <TextBox x:Name="SearchBox" MinWidth="163" Margin="20 5"
+                     DockPanel.Dock="Left" HorizontalAlignment="Stretch"
+                     TextChanged="SearchBox_TextChanged"/>
 
-            <TextBox x:Name="SearchBox" Width="163" 
-                     Margin="20 5"
-                     />
+            <Image Source="Images/Profile Icon.png" MaxWidth="35"
+                   MaxHeight="35" Margin="5 0" DockPanel.Dock="Right" />
 
-            <Image Source="Images/Profile Icon.png" MaxWidth="35" 
-                   MaxHeight="35" Margin="5 0" />
+        </DockPanel>
 
-            <Image Source="Images/Cart Icon.png" MaxWidth="35" 
-                   MaxHeight="35" Margin="5 0" />
-
-        </StackPanel>
-        
         <!-- Sort By // Edit Button -->
-        <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"
-                    Orientation="Horizontal">
-
-            <TextBlock Text="Sort By:" FontSize="25"
-                       VerticalAlignment="Bottom" Margin="10 0 50 0" />
-
-            <Button x:Name="EditButton" Width="104" Height="42" 
-                    Background="#F29716" FontSize="32" Margin="90 5 0 5"
-                    Click="EditButton_Click">
+        <DockPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                   HorizontalAlignment="Stretch">
+            <TextBlock Text="Sort By:" FontSize="25" VerticalAlignment="Bottom"
+                       Margin="10 0 50 0" />
+            <Button x:Name="EditButton" Width="104" Height="42" Background="#F29716"
+                    FontSize="32" Margin="90 5 0 5" Click="EditButton_Click"
+                    DockPanel.Dock="Right">
                 <Button.Content>
                     <TextBlock Text="EDIT" HorizontalAlignment="Center"
                                VerticalAlignment="Center" />
                 </Button.Content>
             </Button>
-
-        </StackPanel>
+        </DockPanel>
 
         <!-- Sort By Combobox -->
-        <ComboBox x:Name="SortComboBox" Grid.Row="3" Grid.Column="1"
+        <ComboBox x:Name="SortComboBox" Grid.Row="2" Grid.Column="0"
                   Grid.ColumnSpan="2" Margin="10 0" FontSize="18"
                   SelectionChanged="SortComboBox_SelectionChanged">
             <ComboBoxItem Content="Name" />
             <ComboBoxItem Content="ID" />
         </ComboBox>
         
+        
         <!-- Inventory ListView -->
-        <ListView x:Name="ProductListView" Grid.Row="4" Grid.Column="1" 
+        <ListView x:Name="ProductListView" Grid.Row="3" Grid.Column="0" 
                   Grid.ColumnSpan="3" Margin="10 10 15 10"
-                  Visibility="Visible">
+                  Visibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Name" Width="110" 
+                    <GridViewColumn Header="Name" Width="Auto" 
                                     DisplayMemberBinding="{Binding Name}" />
-                    <GridViewColumn Header="Id" Width="30"
+                    <GridViewColumn Header="Id" Width="Auto"
                                     DisplayMemberBinding="{Binding Id}" />
-                    <GridViewColumn Header="Price" Width="60"
+                    <GridViewColumn Header="Price" Width="Auto"
                                     DisplayMemberBinding="{Binding Price}" />
-                    <GridViewColumn Header="Quantity" Width="100"
+                    <GridViewColumn Header="Quantity" Width="Auto"
                                     DisplayMemberBinding="{Binding Quantity}" />
                 </GridView>
             </ListView.View>
         </ListView>
         
         <!-- EditButton Panel -->
-        <StackPanel x:Name="editPanel" Grid.Row="4" Grid.Column="1"
+        <StackPanel x:Name="editPanel" Grid.Row="3" Grid.Column="0"
                     Grid.ColumnSpan="3" Margin="10 10 15 10" Width="328"
                     Visibility="Collapsed" Orientation="Vertical">
 
@@ -136,26 +124,24 @@
         </StackPanel>
 
         <!-- Footer -->
-        <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="5"
-                    HorizontalAlignment="Left" Orientation="Horizontal"
-                    Background="Gray" MaxHeight="45">
+        <DockPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Style="{StaticResource DockPanelStyle}">
+
+            <!-- Social Media Links -->
+            <Image Source="Images/Instagram.png" Cursor="Hand" DockPanel.Dock="Right" />
+            <Image Source="Images/Twitter.png" Cursor="Hand" DockPanel.Dock="Right" />
+            <Image Source="Images/Facebook.png" Cursor="Hand" DockPanel.Dock="Right" />
 
             <TextBlock Text="Contact Us" Margin="15 5" FontWeight="Bold" 
-                       FontSize="33" TextAlignment="Center" 
-                       HorizontalAlignment="Center" Cursor="Hand"
-                       VerticalAlignment="Center" Foreground="White">
+                   FontSize="33" TextAlignment="Center" 
+                   HorizontalAlignment="Center" Cursor="Hand"
+                   VerticalAlignment="Center" Foreground="White"
+                   Width="200">
                 <TextBlock.Effect>
                     <DropShadowEffect Color="Black" BlurRadius="5" ShadowDepth="0" />
                 </TextBlock.Effect>
             </TextBlock>
 
-            <!-- Social Media Links -->
-            <Image Source="Images/Instagram.png" Cursor="Hand" />
-            <Image Source="Images/Twitter.png" Cursor="Hand" />
-            <Image Source="Images/Facebook.png" Cursor="Hand" />
-
-
-        </StackPanel>
+        </DockPanel>
 
     </Grid>
 </Window>

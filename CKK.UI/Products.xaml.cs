@@ -150,5 +150,16 @@ namespace CKK.UI
             }
          }
       }
-   }
+
+		private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
+		{
+            string searchText = SearchBox.Text.ToLower();
+
+            var filteredItems = _unitOfWork.Products.GetAll()
+                .Where(p => p.Name.ToLower().Contains(searchText) || p.Id.ToString().Contains(searchText))
+                .ToList();
+
+            ProductListView.ItemsSource = filteredItems;
+		}
+	}
 }

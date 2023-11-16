@@ -7,11 +7,8 @@
         mc:Ignorable="d" FontSize="24"
         Title="Home" Height="800" Width="358">
     <Window.Resources>
-        <Style x:Key="StackPanelStyle" TargetType="StackPanel">
-            <Setter Property="Grid.Column" Value="0" />
-            <Setter Property="Grid.ColumnSpan" Value="3" />
-            <Setter Property="HorizontalAlignment" Value="Left" />
-            <Setter Property="Orientation" Value="Horizontal" />
+        <Style x:Key="DockPanelStyle" TargetType="DockPanel">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="Background" Value="Gray" />
         </Style>
     </Window.Resources>
@@ -32,21 +29,16 @@
         </Grid.RowDefinitions>
         
         <!-- Header -->
-        <StackPanel Grid.Row="0" Style="{StaticResource StackPanelStyle}"> 
+        <DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" 
+                   Style="{StaticResource DockPanelStyle}">
+            <Image Source="Images/Mini-Icon.png" MaxWidth="45"
+                   MaxHeight="45" Margin="5 0" DockPanel.Dock="Left" />
 
-            <Image Source="Images/Mini-Icon.png" MaxWidth="45" 
-                   MaxHeight="45" Margin="5 0" />
-
-            <TextBox x:Name="SearchBox" Width="163" 
-                     Margin="20 5"/>
+            <Image Source="Images/Profile Icon.png" MaxWidth="35"
+                   MaxHeight="35" Margin="5 0" DockPanel.Dock="Right"
+                   HorizontalAlignment="Right"/>
             
-            <Image Source="Images/Profile Icon.png" MaxWidth="35" 
-                   MaxHeight="35" Margin="5 0" />
-            
-            <Image Source="Images/Cart Icon.png" MaxWidth="35" 
-                   MaxHeight="35" Margin="5 0" />
-            
-        </StackPanel> 
+        </DockPanel>
             
         <!-- SubHeader Logo -->
         <Image Source="Images/CKK Header.png" 
@@ -65,24 +57,24 @@
                MouseLeftButtonDown="testimonialImage_MouseLeftButtonDown"/>
         
         <!-- Footer -->
-        <StackPanel Grid.Row="4" Style="{StaticResource StackPanelStyle}">
+        <DockPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Style="{StaticResource DockPanelStyle}">
+
+            <!-- Social Media Links -->
+            <Image Source="Images/Instagram.png" Cursor="Hand" DockPanel.Dock="Right" />
+            <Image Source="Images/Twitter.png" Cursor="Hand" DockPanel.Dock="Right" />
+            <Image Source="Images/Facebook.png" Cursor="Hand" DockPanel.Dock="Right" />
 
             <TextBlock Text="Contact Us" Margin="15 5" FontWeight="Bold" 
-                       FontSize="33" TextAlignment="Center" 
-                       HorizontalAlignment="Center" Cursor="Hand"
-                       VerticalAlignment="Center" Foreground="White">
+               FontSize="33" TextAlignment="Center" 
+               HorizontalAlignment="Center" Cursor="Hand"
+               VerticalAlignment="Center" Foreground="White"
+               Width="200">
                 <TextBlock.Effect>
                     <DropShadowEffect Color="Black" BlurRadius="5" ShadowDepth="0" />
                 </TextBlock.Effect>
             </TextBlock>
 
-            <!-- Social Media Links -->
-            <Image Source="Images/Instagram.png" Cursor="Hand" />
-            <Image Source="Images/Twitter.png" Cursor="Hand" />
-            <Image Source="Images/Facebook.png" Cursor="Hand" />
-            
-
-        </StackPanel>
+        </DockPanel>
 
     </Grid>
 </Window>
