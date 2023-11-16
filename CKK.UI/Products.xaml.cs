@@ -1,6 +1,5 @@
 ﻿using CKK.Logic.Interfaces;
 using CKK.Logic.Models;
-using CKK.Persistance.Models;
 using CKK.DB.UOW;
 using System;
 using System.Collections.Generic;
